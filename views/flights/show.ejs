@@ -1,0 +1,38 @@
+<%- include('../partials/header') %>
+
+<section id="show-page">
+  <div>Flight: </div>
+  <div><%= flight.flight %></div>
+  <div>Departure Date: </div>
+  <div><%= flight.departureTime %></div>
+  <div>Flight #: </div>
+  <div><%= flight.flightNo %></div>
+  <div>Destination: </div>
+  <div><%= flight.nowNooking ? 'Yes' : 'No' %></div>
+  <div>Cast:</div>
+  <ul>
+    <%- movie.cast.map(p => 
+      `<li>${p.name} <small>${p.born.toLocaleDateString()}</small></li>`
+    ).join('') %>
+  </ul>
+</section>
+
+<br><br>
+<h2>Destinations</h2>
+<form id="add-destination-form" method="POST" action="/flights/<%= flight._id %>/details">
+  <textarea name="content"></textarea>
+  <label>Destination City:</label>
+  <select name="rating">
+    <option value="1">AUS</option>
+    <option value="2">DAL</option>
+    <option value="3">LAX</option>
+    <option value="4">SEA</option>
+  </select>
+  <input type="submit" value="Add Destination">
+</form>
+
+
+  
+
+
+<%- include('../partials/footer') %>
