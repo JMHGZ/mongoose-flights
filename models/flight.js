@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-
 var Schema = mongoose.Schema;
 
 var destinationSchema = new Schema({
@@ -28,7 +27,7 @@ var flightSchema = new Schema({
     flightNo: {
        type: Number,
        default: function() {
-           return new Number().getfullyear//new Date().getfullyear
+           return new Date().getFullYear();//new Date().getfullyear
        },
        min: 10,
        max: 9999
@@ -37,7 +36,8 @@ var flightSchema = new Schema({
         type: Date, 
         default: 08/19/2020
     },
-    destinations: [destinationSchema]
+    destinations: [destinationSchema],
+    flightNo: [Schema.Types.ObjectId]
 }, {
     timestamps: true
 });

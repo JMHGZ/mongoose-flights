@@ -8,10 +8,10 @@
   <div>Flight #: </div>
   <div><%= flight.flightNo %></div>
   <div>Destination: </div>
-  <div><%= flight.nowNooking ? 'Yes' : 'No' %></div>
-  <div>Cast:</div>
+  <div><%= flight.nowBooking ? 'Yes' : 'No' %></div>
+  <div>Flight Number:</div>
   <ul>
-    <%- movie.cast.map(p => 
+    <%- movie.flightNo.map(p => 
       `<li>${p.name} <small>${p.born.toLocaleDateString()}</small></li>`
     ).join('') %>
   </ul>
@@ -31,7 +31,26 @@
   <input type="submit" value="Add Destination">
 </form>
 
-
+<% if (flight.destinations.length) { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Flight</th>
+          <th>Destination</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% flight.destinations.forEach(function(d) { %>
+          <tr>
+            <td><%= d.createdAt.toLocaleDateString() %></td>
+            <td><%= d.flight %></td>
+            <td><%= d.destination %></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  
   
 
 

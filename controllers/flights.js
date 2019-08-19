@@ -1,4 +1,5 @@
 var Flight = require('../models/flight');
+var Ticket = require('../models/ticket');
 
 module.exports = {
     new: newFlight,
@@ -8,9 +9,17 @@ module.exports = {
 };
 
 function show(req, res) {
-    Flight.findById(req.params.id, function(err, flight) {
-        res.render('flights/show', { airline: 'Airline Detail', flight });
-    });
+    Flight.findById(req.params.id).populate('flightNo').exec(function(err, flight) {
+        Ticket.find({
+            _id: {$nin: flight.flightNo}
+        }, function(err, tickets) {
+            res.render('flights/show', {
+             airline: 'Airline Detail',
+             flight,
+            tickets 
+         });
+        });
+      });
 }
 
 function index(req, res) {
@@ -20,11 +29,8 @@ function index(req, res) {
 }
 
 function create(req, res) {
-  // convert nowBooking's checkbox of nothing or "on" to boolean
   req.body.nowBooking = !!req.body.nowBooking;
-  // remove whitespace next to commas
   req.body.flightNo = req.body.flightNo.replace(/\s*,\s*/g, ',');
-  // split if it's not an empty string
   if (req.body.flightNo) req.body.flightNo = req.body.flightNo.split(',');
   for(let key in req.body) {
       if (req.body[key] === '') delete req.body[key];
@@ -32,11 +38,9 @@ function create(req, res) {
 
   var flight = new Flight(req.body);
   flight.save(function(err) {
-    // one way to handle errors
-    if (err) return res.render('flights/new');
+    if (err) return res.redirect('flights/new');
     console.log(flight);
-    // for now, redirect right back to new.ejs
-    res.redirect('/flights');
+    res.redirect(`/flights/${flight._id}`);
   });    
 }
 
